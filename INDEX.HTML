@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPE Quest: Guardianes del Bienestar - Sagrado Corazón</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for futuristic icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            950: '#030712',
+                            900: '#0B1528',
+                            800: '#111E36',
+                            700: '#1E2F50',
+                        },
+                        cyber: {
+                            neon: '#06B6D4',
+                            purple: '#7C3AED',
+                            emerald: '#10B981',
+                            pink: '#EC4899',
+                            yellow: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #030712;
+            color: #F3F4F6;
+        }
+        /* Custom scrollbar for cyber aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B1528;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7C3AED;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06B6D4;
+        }
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+        .text-glow {
+            text-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden min-h-screen flex flex-col">
+
+    <!-- TOP HEADER / INSTITUTIONAL HUD -->
+    <header class="border-b border-space-700/50 bg-space-900/80 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Left Side: Institution Info & Brand -->
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyber-purple via-cyber-neon to-cyber-emerald flex items-center justify-center text-white font-tech text-xl font-bold shadow-lg animate-pulse">
+                        SC
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 bg-cyber-emerald text-[9px] font-bold px-1 rounded-full text-space-950 border border-space-950 animate-bounce">2E</span>
+                </div>
+                <div>
+                    <h1 class="font-tech text-base md:text-lg font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-cyber-neon via-white to-cyber-emerald">
+                        U.E.F. SAGRADO CORAZÓN
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">
+                        PPE 2º BGU "E" • <span class="text-cyber-neon">Salud y Bienestar Social</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Center/Right Stats Indicators (Gaming HUD Style) -->
+            <div class="flex items-center flex-wrap gap-3 md:gap-4 justify-end w-full md:w-auto">
+                <!-- Visualizar Planificación Button -->
+                <button onclick="togglePlanningModal(true)" class="bg-gradient-to-r from-cyber-emerald/20 to-cyber-neon/20 hover:from-cyber-emerald hover:to-cyber-neon text-cyber-neon hover:text-space-950 border border-cyber-emerald/40 hover:border-transparent rounded-xl px-3.5 py-2 text-xs font-bold font-tech tracking-wider transition-all duration-300 flex items-center gap-2 glow-emerald">
+                    <i class="fa-solid fa-file-pdf text-sm"></i>
+                    <span>VER PLANIFICACIÓN</span>
+                </button>
+
+                <!-- Course Tracker -->
+                <div class="bg-space-800/80 border border-space-700/60 rounded-xl px-3 py-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-cyber-neon text-sm"></i>
+                    <div>
+                        <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Tutor</div>
+                        <div class="text-xs font-bold text-slate-200">Ing. César Godoy</div>
+                    </div>
+                </div>
+
+                <!-- XP/Hours Progress Bar for Phase 1 (20 Hours) -->
+                <div class="bg-space-800/80 border border-space-700/60 rounded-xl px-3 py-1.5 flex flex-col gap-1 w-44">
+                    <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider">
+                        <span class="text-slate-400">Fase 1 (Información)</span>
+                        <span id="global-hours" class="text-cyber-neon font-tech">0 / 20 Hs</span>
+                    </div>
+                    <div class="w-full bg-space-950 rounded-full h-1.5 overflow-hidden">
+                        <div id="global-hours-bar" class="bg-gradient-to-r from-cyber-purple to-cyber-neon h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Global Score Level indicator -->
+                <div class="bg-gradient-to-r from-cyber-purple/20 to-cyber-neon/20 border border-cyber-purple/40 rounded-xl px-3 py-1.5 flex items-center gap-2 relative overflow-hidden group">
+                    <div class="w-2 h-2 rounded-full bg-cyber-neon animate-ping"></div>
+                    <div class="relative z-10 text-right">
+                        <span class="text-[9px] text-slate-400 block uppercase font-semibold">Nota Parcial PPE</span>
+                        <span class="text-xs font-tech font-bold text-cyber-neon" id="grading-percentage">0.00 / 2.50 Ptos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN GAMIFIED CONTAINER -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- LEFT SIDEBAR: Mission/Week Selector -->
+        <aside class="lg:col-span-1 flex flex-col gap-4">
+            <!-- Sidebar Header -->
+            <div class="bg-space-900/60 border border-space-700/40 rounded-2xl p-4">
+                <h2 class="font-tech text-sm font-bold text-slate-300 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-cyber-purple"></i> Mapa de Misiones
+                </h2>
+                
+                <!-- Quick Instructions -->
+                <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                    Completa la <span class="text-cyber-neon font-semibold">Fase de Información</span>. Cada semana comprende <strong class="text-cyber-emerald">2 períodos de 40 min</strong> de interacción teórica y simulación digital.
+                </p>
+
+                <!-- Navigation List -->
+                <div class="space-y-2 h-[450px] overflow-y-auto pr-1" id="week-tabs-container">
+                    <!-- Week selectors will be injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Dynamic Soundboard & Quick Tools Widget -->
+            <div class="bg-space-900/60 border border-space-700/40 rounded-2xl p-4">
+                <h3 class="font-tech text-xs font-bold text-slate-300 uppercase mb-3 flex items-center justify-between">
+                    <span>Sfx Auxiliares</span>
+                    <i class="fa-solid fa-volume-high text-cyber-emerald"></i>
+                </h3>
+                <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                    <button onclick="synthesizeSound('success')" class="bg-space-800 hover:bg-space-700 border border-space-700 text-slate-300 hover:text-white px-2 py-2 rounded-lg transition-all duration-200 font-semibold flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyber-emerald"></span> Logro
+                    </button>
+                    <button onclick="synthesizeSound('warning')" class="bg-space-800 hover:bg-space-700 border border-space-700 text-slate-300 hover:text-white px-2 py-2 rounded-lg transition-all duration-200 font-semibold flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyber-yellow"></span> Alerta
+                    </button>
+                    <button onclick="synthesizeSound('cyber')" class="bg-space-800 hover:bg-space-700 border border-space-700 text-slate-300 hover:text-white px-2 py-2 rounded-lg transition-all duration-200 font-semibold flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyber-neon"></span> Tecno
+                    </button>
+                    <button onclick="synthesizeSound('fail')" class="bg-space-800 hover:bg-space-700 border border-space-700 text-slate-300 hover:text-white px-2 py-2 rounded-lg transition-all duration-200 font-semibold flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyber-pink"></span> Error
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT MAIN AREA: Dynamic Educational and Interactive Canvas -->
+        <section class="lg:col-span-3 flex flex-col gap-6">
+            
+            <!-- CURRENT QUEST DASHBOARD -->
+            <div id="quest-card" class="bg-gradient-to-b from-space-900 to-space-950 border-2 border-cyber-purple/30 rounded-3xl p-6 glow-purple relative overflow-hidden transition-all duration-300">
+                
+                <!-- Background Glowing Orbs -->
+                <div class="absolute -right-24 -top-24 w-60 h-60 bg-cyber-purple/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-24 -bottom-24 w-60 h-60 bg-cyber-neon/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <!-- Quest Title & Meta -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-space-700/50 pb-4 mb-6 gap-3">
+                    <div class="flex items-center gap-3">
+                        <div id="quest-icon-container" class="w-12 h-12 rounded-xl bg-cyber-purple/20 border border-cyber-purple text-cyber-purple flex items-center justify-center text-xl">
+                            <!-- Icon Injected dynamically -->
+                        </div>
+                        <div>
+                            <span id="quest-badge" class="bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/30 text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full">
+                                Semana 1
+                            </span>
+                            <h2 id="quest-title" class="font-tech text-xl md:text-2xl font-black text-white mt-1">
+                                Cargando Misión...
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-space-850/80 px-4 py-2 border border-space-700/50 rounded-xl self-start md:self-auto">
+                        <div class="text-right">
+                            <span class="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Duración</span>
+                            <span id="quest-reward" class="text-xs font-bold text-cyber-emerald font-tech">2 períodos de 40m</span>
+                        </div>
+                        <i class="fa-solid fa-clock text-cyber-emerald text-lg animate-pulse"></i>
+                    </div>
+                </div>
+
+                <!-- QUEST PEDAGOGICAL CONTENT TABS -->
+                <div class="flex gap-2 border-b border-space-700/30 pb-3 mb-6 overflow-x-auto">
+                    <button onclick="switchContentTab('concept')" id="tab-btn-concept" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-transparent bg-cyber-purple text-white shadow-md">
+                        <i class="fa-solid fa-book-open mr-1"></i> Concepto & Destreza
+                    </button>
+                    <button onclick="switchContentTab('interactive')" id="tab-btn-interactive" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-space-700 text-slate-400 hover:text-slate-200 hover:bg-space-800">
+                        <i class="fa-solid fa-gamepad mr-1"></i> Simulador Práctico
+                    </button>
+                    <button onclick="switchContentTab('bitacora')" id="tab-btn-bitacora" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-space-700 text-slate-400 hover:text-slate-200 hover:bg-space-800">
+                        <i class="fa-solid fa-feather-pointed mr-1"></i> Generador de Bitácora
+                    </button>
+                </div>
+
+                <!-- TAB CONTAINER: CONCEPT -->
+                <div id="tab-concept" class="space-y-6">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- TAB CONTAINER: INTERACTIVE GAME / SIMULATOR -->
+                <div id="tab-interactive" class="hidden space-y-6">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- TAB CONTAINER: BITACORA FORM / EXPORTER -->
+                <div id="tab-bitacora" class="hidden space-y-6">
+                    <div class="bg-space-800/40 border border-space-700/40 rounded-2xl p-5 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-cyber-purple to-cyber-neon"></div>
+                        <h3 class="font-tech text-base font-bold text-slate-200 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyber-neon"></i> Bitácora Digital Automatizada
+                        </h3>
+                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                            Registra tus actividades de hoy de forma estructurada para actualizar tu bitácora digital. Puedes utilizar la inteligencia artificial para pulir tus ideas acorde con las directrices de la LOEI y del docente César Godoy.
+                        </p>
+
+                        <!-- Live Interactive form -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[11px] uppercase font-bold text-slate-300">¿Qué aprendiste hoy? (2 períodos - 80 min)</label>
+                                <textarea id="bitacora-input-concept" rows="3" oninput="updateBitacoraPreviewLocal()" placeholder="Ej: Importancia de la LOEI, 80 horas de PPE, 10% de la nota de grado..." class="bg-space-950 border border-space-700 focus:border-cyber-purple outline-none rounded-xl p-3 text-xs text-slate-200 transition-all duration-200 resize-none"></textarea>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[11px] uppercase font-bold text-slate-300">¿Cómo lo aplicarás en tu comunidad escolar?</label>
+                                <textarea id="bitacora-input-application" rows="3" oninput="updateBitacoraPreviewLocal()" placeholder="Ej: Respetando las normas institucionales y comprometiéndome a asistir con puntualidad..." class="bg-space-950 border border-space-700 focus:border-cyber-purple outline-none rounded-xl p-3 text-xs text-slate-200 transition-all duration-200 resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Gemini AI Assistance Action -->
+                        <div class="mt-4 flex flex-wrap gap-2 justify-between items-center bg-space-950/40 p-3 rounded-xl border border-space-700/30">
+                            <div class="text-xs text-slate-400 flex items-center gap-2">
+                                <span class="flex h-2 w-2 relative">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-neon opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyber-neon"></span>
+                                </span>
+                                Motor de Redacción: <strong class="text-cyber-neon font-tech">Gemini Core</strong>
+                            </div>
+                            <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                                <button onclick="improveWithAI()" class="flex-grow sm:flex-none px-4 py-2 bg-gradient-to-r from-cyber-purple to-cyber-neon hover:from-cyber-neon hover:to-cyber-purple text-space-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md glow-cyan flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-robot"></i> Perfeccionar con IA
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Generated Bitacora Preview Area -->
+                        <div class="mt-6 border-t border-space-700/50 pt-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-xs uppercase font-bold text-cyber-emerald font-tech tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-clipboard-check"></i> Borrador de Bitácora Digital Oficial
+                                </h4>
+                                <button onclick="copyToClipboard()" class="bg-space-850 hover:bg-space-800 border border-space-700 hover:border-cyber-emerald text-slate-300 hover:text-cyber-emerald px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> Copiar Borrador
+                                </button>
+                            </div>
+                            <!-- Static structured bitacora result container -->
+                            <div class="bg-space-950 border border-space-700/80 rounded-2xl p-4 font-mono text-[11px] text-slate-300 space-y-3 leading-relaxed relative" id="bitacora-preview-box">
+                                <div class="grid grid-cols-2 gap-2 text-[10px] border-b border-space-700/40 pb-2 text-slate-400">
+                                    <div>INSTITUCIÓN: U.E.F. Sagrado Corazón</div>
+                                    <div>ESTUDIANTE: Promotor de Salud (2do E)</div>
+                                    <div id="bit-week-label">SEMANA: 1 (2 períodos / 80 min)</div>
+                                    <div>TUTOR: Ing. César Godoy Rosero, Mgt.</div>
+                                </div>
+                                <div>
+                                    <span class="text-cyber-neon font-bold block mb-1 uppercase tracking-wider">&bull; Resumen de Aprendizajes:</span>
+                                    <p id="preview-learning" class="text-slate-200">Completa el formulario y presiona 'Perfeccionar con IA' o rellena los campos para generar automáticamente.</p>
+                                </div>
+                                <div>
+                                    <span class="text-cyber-purple font-bold block mb-1 uppercase tracking-wider">&bull; Aplicación en la Comunidad:</span>
+                                    <p id="preview-application" class="text-slate-200">Aquí se detallará el impacto práctico comunitario del conocimiento adquirido.</p>
+                                </div>
+                                <div>
+                                    <span class="text-cyber-emerald font-bold block mb-1 uppercase tracking-wider">&bull; Compromisos Iniciales y Axiología:</span>
+                                    <p id="preview-commitment" class="text-slate-200">Compromiso ético enfocado en el autocontrol digital y responsabilidad social.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- QUEST COMPLETED OVERLAY BANNER -->
+                <div id="quest-success-banner" class="hidden mt-6 bg-gradient-to-r from-cyber-emerald/10 via-space-900 to-cyber-emerald/10 border border-cyber-emerald/30 rounded-2xl p-4 flex items-center justify-between gap-4 animate-fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-cyber-emerald/20 text-cyber-emerald flex items-center justify-center text-lg shadow-inner">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wider">¡Misión Cumplida!</h4>
+                            <p class="text-xs text-slate-400">Has registrado tus actividades y acumulado +2 horas académicas para tu portafolio oficial.</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-tech text-cyber-emerald font-bold uppercase">+2 Horas PPE</span>
+                </div>
+
+            </div>
+
+            <!-- AI DISPATCH / CREATIVE HUB -->
+            <div class="bg-gradient-to-r from-space-900 to-space-950 border border-space-700/60 rounded-3xl p-6 relative overflow-hidden">
+                <div class="absolute -right-20 -bottom-20 w-44 h-44 bg-cyber-emerald/5 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <h3 class="font-tech text-base md:text-lg font-black text-white tracking-wider flex items-center gap-2 mb-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyber-neon animate-pulse"></span>
+                    CABINA DE IA: GENERADOR DE CONTENIDOS DE SALUD
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                    ¿Preparándote para la <strong class="text-cyber-neon">Cabina Digital (Semanas 7, 8 y 9)</strong>? Genera al instante libretos de radio, copys educativos para TikTok/Reels o estadísticas de sedentarismo escolar utilizando el modelo Gemini.
+                </p>
+
+                <!-- Prompt Builder -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-slate-300 block mb-1">Formato</label>
+                        <select id="ai-hub-format" class="w-full bg-space-950 border border-space-700 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-cyber-purple">
+                            <option value="Libreto de Podcast Radial (2 personas - 2 bloques)">Libreto de Podcast Radial (2 personas)</option>
+                            <option value="Guión Corto para Reel/TikTok (60 segundos)">Guión Corto para Reel/TikTok (1 min)</option>
+                            <option value="Slogan e Ideas de Campaña de Redes">Slogan e Ideas de Campaña de Redes</option>
+                            <option value="Estadística simulada del uso de pantallas en Esmeraldas">Estadísticas/Infografía Textual</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] uppercase font-bold text-slate-300 block mb-1">Tema Principal</label>
+                        <input type="text" id="ai-hub-topic" placeholder="Ej: El Scroll Infinito, Pausas Activas del MINEDUC, Síntomas del Sedentarismo Digital..." class="w-full bg-space-950 border border-space-700 rounded-xl p-2.5 text-xs text-slate-200 outline-none focus:border-cyber-purple">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <button id="ai-generate-btn" onclick="generateEducontent()" class="px-5 py-2.5 bg-gradient-to-r from-cyber-purple via-cyber-neon to-cyber-emerald text-space-950 font-tech text-xs font-black uppercase tracking-wider rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-lg glow-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-microphone-lines animate-pulse"></i> Sintonizar Cabina IA
+                    </button>
+                </div>
+
+                <!-- Custom Sound Output / Readout Area -->
+                <div id="ai-result-panel" class="hidden mt-4 bg-space-950 border border-space-750 rounded-2xl p-4 relative">
+                    <div class="flex items-center justify-between border-b border-space-700/40 pb-2 mb-3">
+                        <span class="text-[10px] uppercase font-bold text-cyber-neon font-tech tracking-wider flex items-center gap-1">
+                            <i class="fa-solid fa-broadcast-tower"></i> Señal en vivo de la Cabina Digital
+                        </span>
+                        <button onclick="copyAiOutput()" class="text-slate-400 hover:text-white text-xs flex items-center gap-1">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                    <pre id="ai-result-text" class="text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed h-[200px] overflow-y-auto pr-2"></pre>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL VISUALIZADOR DE PLANIFICACIÓN OFICIAL (PDF) -->
+    <div id="planning-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-space-900 border-2 border-cyber-emerald/50 rounded-3xl w-full max-w-5xl shadow-2xl glow-emerald max-h-[90vh] flex flex-col overflow-hidden animate-fade-in relative">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-space-700/50 bg-gradient-to-r from-space-950 to-space-900 flex justify-between items-start gap-4">
+                <div>
+                    <span class="bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/30 text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full">
+                        Documento Curricular de Referencia: PLANIFICACIÒN- FASE DE INFORMACIÓN 2E BGU.pdf
+                    </span>
+                    <h2 class="font-tech text-lg md:text-xl font-black text-white mt-1">
+                        PLANIFICACIÓN DE LA FASE DE INFORMACIÓN (PPE)
+                    </h2>
+                    <p class="text-xs text-slate-400">
+                        Año Lectivo 2026-2027 • Unidad Educativa Fiscomisional "Sagrado Corazón" • Tutor: César Godoy Rosero
+                    </p>
+                </div>
+                <button onclick="togglePlanningModal(false)" class="bg-space-800 hover:bg-space-700 text-slate-400 hover:text-white p-2 rounded-xl transition-all duration-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content Scrolling Body -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-grow text-slate-300 text-xs">
+                
+                <!-- Section 1: Datos Informativos Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-space-950 p-4 rounded-2xl border border-space-700/40">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-500 block">Docente</span>
+                        <span class="text-slate-200 font-bold">Ing. César Godoy Rosero, Mgt.</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-500 block">Fecha de Inicio / Fin</span>
+                        <span class="text-slate-200 font-semibold">03/06/2026 al 07/08/2026</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-500 block">Curso & Nivel</span>
+                        <span class="text-slate-200 font-semibold">2do E BGU - Bachillerato</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-500 block">Duración Total Fase 1</span>
+                        <span class="text-cyber-neon font-bold">10 Semanas (20 Horas Clase)</span>
+                    </div>
+                </div>
+
+                <!-- Section 2: Objetivo de Aprendizaje -->
+                <div class="bg-space-850/60 p-4 rounded-2xl border-l-4 border-cyber-neon space-y-2">
+                    <h4 class="font-tech text-xs font-bold text-cyber-neon uppercase tracking-wider">Objetivo de la Fase de Información</h4>
+                    <p class="leading-relaxed">
+                        Promover la salud y el bienestar social en el contexto educativo frente al impacto del sedentarismo causado por la hiperconectividad en redes sociales, fortaleciendo a los estudiantes de 2do E de Bachillerato como promotores comunitarios y ciudadanos responsables en el marco de la Participación Estudiantil (PPE); mediante la investigación, sensibilización y el desarrollo de habilidades psicofísicas para la vida, impulsadas mediante el diseño, producción y difusión asertiva utilizando productos multimedia desde una cabina digital, transformando las plataformas virtuales en espacios estratégicos de concienciación e impacto positivo.
+                    </p>
+                </div>
+
+                <!-- Section 3: Valores Curriculares -->
+                <div>
+                    <h4 class="font-tech text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-heart-pulse text-cyber-pink"></i> Valores a Interiorizar
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Respeto</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Responsabilidad</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Empatía</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Solidaridad</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Honestidad</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Tolerancia</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Trabajo en Equipo</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Comunicación Digital Asertiva</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Justicia</span>
+                        <span class="bg-space-850 border border-space-700/60 px-2.5 py-1 rounded-lg text-[10px] font-semibold text-slate-200">Autocontrol</span>
+                    </div>
+                </div>
+
+                <!-- Section 4: Cronograma de Actividades (Matriz) -->
+                <div>
+                    <h4 class="font-tech text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Matriz Semanal de Desarrollo Metodológico</h4>
+                    <div class="overflow-x-auto border border-space-700/40 rounded-xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-space-950 text-slate-400 text-[10px] uppercase tracking-wider font-semibold border-b border-space-700/40">
+                                    <th class="p-3">Semana</th>
+                                    <th class="p-3">Temas de Aprendizaje</th>
+                                    <th class="p-3">Destrezas del Perfil</th>
+                                    <th class="p-3">Indicador Evaluativo</th>
+                                    <th class="p-3">Estrategias / Actividades Activas</th>
+                                    <th class="p-3">Técnicas / Instrumentos</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-space-700/30 bg-space-900/40 text-[11px] text-slate-300 leading-relaxed" id="planning-table-rows">
+                                <!-- Injected dynamically via JS to represent exactly the PDF data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-space-700/50 bg-space-950 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-slate-500 text-[10px]">
+                <div>
+                    Coordinación: Mgt. Mónica Robinzòn M. • Mgt. Luis Lazo Mera • Mgt. Elsa Lara Calderón
+                </div>
+                <button onclick="togglePlanningModal(false)" class="px-4 py-2 bg-space-800 hover:bg-space-700 text-slate-200 rounded-xl font-bold transition-all duration-200">
+                    Cerrar Planificación
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-space-700/40 bg-space-950 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <p class="text-xs text-slate-400">
+                    &copy; 2026 Unidad Educativa Fiscomisional <strong class="text-white">"Sagrado Corazón"</strong>. Esmeraldas, Ecuador.
+                </p>
+                <p class="text-[10px] text-slate-500 mt-1">
+                    Herramienta pedagógica innovadora construida para el programa de Participación Estudiantil (PPE).
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-400">Coordinación:</span>
+                <span class="text-[10px] bg-space-800 border border-space-700 px-2 py-1 rounded text-slate-300">Mgt. Mónica Robinzòn M.</span>
+                <span class="text-[10px] bg-space-800 border border-space-700 px-2 py-1 rounded text-slate-300">Mgt. Luis Lazo Mera</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT & APP LOGIC -->
+    <script>
+        // 10 Weeks Curriculum database from document (With exact references to periods and hours)
+        const WEEKS_DATA = [
+            {
+                number: 1,
+                title: "Socialización y LOEI",
+                subtitle: "Inducción y compromisos iniciales sobre la normativa legal del PPE",
+                reward: "2 períodos de 40m",
+                hours: 2,
+                icon: "fa-solid fa-gavel",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ¡Bienvenido a la Misión 1! Hoy nos socializaremos con las directrices de la <strong>Ley Orgánica de Educación Intercultural (LOEI)</strong> que regula tu programa de Participación Estudiantil.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="bg-space-850 p-3 rounded-xl border border-space-700/50">
+                                <span class="text-cyber-neon font-tech text-lg font-bold">20 Horas</span>
+                                <p class="text-[10px] text-slate-400 mt-1">Duración dedicada para la Fase 1 (Información) sobre un total de 10 semanas.</p>
+                            </div>
+                            <div class="bg-space-850 p-3 rounded-xl border border-space-700/50">
+                                <span class="text-cyber-purple font-tech text-lg font-bold">10% Nota</span>
+                                <p class="text-[10px] text-slate-400 mt-1">Ponderación equivalente sobre la nota final de grado de bachillerato.</p>
+                            </div>
+                            <div class="bg-space-850 p-3 rounded-xl border border-space-700/50">
+                                <span class="text-cyber-emerald font-tech text-lg font-bold">Bitácora</span>
+                                <p class="text-[10px] text-slate-400 mt-1">El documento individual oficial que debes certificar cada semana para validar horas.</p>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-r from-space-900 to-space-850 border-l-4 border-cyber-purple p-4 rounded-r-xl">
+                            <strong class="text-xs text-cyber-purple uppercase block font-tech mb-1">Pedagogía Activa: ¿Por qué Participación Estudiantil?</strong>
+                            <p class="text-xs text-slate-300 italic">
+                                "La participación estudiantil no es solo un derecho establecido por el Ministerio de Educación, es un espacio de liderazgo donde tú dejas de ser espectador para convertirte en el motor de cambio en tu colegio y barrio."
+                            </p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Simulador de Puntuación LOEI</h4>
+                        <p class="text-xs text-slate-400">Modifica los deslizadores para ver cómo influye el PPE en tu nota de grado de Bachillerato.</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-300">Nota del examen y promedio (90%):</span>
+                                <span id="val-grade" class="font-bold text-white">8.50 / 10.00</span>
+                            </div>
+                            <input type="range" id="input-grade" min="5" max="10" step="0.1" value="8.5" oninput="calculateLOEI()" class="w-full h-1 bg-space-900 rounded-lg appearance-none cursor-pointer accent-cyber-neon">
+                            
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-300">Nota del programa de PPE (10%):</span>
+                                <span id="val-ppe" class="font-bold text-cyber-purple">10.00 / 10.00</span>
+                            </div>
+                            <input type="range" id="input-ppe" min="1" max="10" step="0.1" value="10" oninput="calculateLOEI()" class="w-full h-1 bg-space-900 rounded-lg appearance-none cursor-pointer accent-cyber-purple">
+                        </div>
+
+                        <div class="mt-4 bg-space-900 p-3 rounded-lg border border-space-700/50 flex justify-between items-center">
+                            <span class="text-xs uppercase font-bold text-slate-400">Nota Final de Graduación:</span>
+                            <span id="val-total" class="font-tech text-base font-bold text-cyber-emerald">8.65 / 10.00</span>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 2,
+                title: "Valores del Promotor",
+                subtitle: "Integración de los 10 valores fundamentales frente al entorno digital",
+                reward: "2 períodos de 40m",
+                hours: 4,
+                icon: "fa-solid fa-heart-pulse",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Como promotor comunitario de salud en el <strong>Sagrado Corazón</strong>, tu ética es tu escudo. El programa destaca 10 valores clave para influenciar positivamente a tu comunidad escolar en contra del cyberbullying, desinformación y el sedentarismo tecnológico.
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-center">
+                            <div class="bg-space-850 p-2 rounded-lg border border-space-700/30 text-xs">
+                                <span class="text-cyber-neon block"><i class="fa-solid fa-check-double"></i></span>
+                                <span class="font-bold text-[10px]">Respeto</span>
+                            </div>
+                            <div class="bg-space-850 p-2 rounded-lg border border-space-700/30 text-xs">
+                                <span class="text-cyber-purple block"><i class="fa-solid fa-shield-halved"></i></span>
+                                <span class="font-bold text-[10px]">Responsabilidad</span>
+                            </div>
+                            <div class="bg-space-850 p-2 rounded-lg border border-space-700/30 text-xs">
+                                <span class="text-cyber-emerald block"><i class="fa-solid fa-hands-holding-child"></i></span>
+                                <span class="font-bold text-[10px]">Empatía</span>
+                            </div>
+                            <div class="bg-space-850 p-2 rounded-lg border border-space-700/30 text-xs">
+                                <span class="text-cyber-pink block"><i class="fa-solid fa-people-carry-box"></i></span>
+                                <span class="font-bold text-[10px]">Solidaridad</span>
+                            </div>
+                            <div class="bg-space-850 p-2 rounded-lg border border-space-700/30 text-xs">
+                                <span class="text-cyber-yellow block"><i class="fa-solid fa-scale-balanced"></i></span>
+                                <span class="font-bold text-[10px]">Justicia</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Además: <strong>Honestidad, Tolerancia, Trabajo en Equipo, Comunicación Digital Asertiva</strong> y <strong>Autocontrol</strong> de impulsos.
+                        </p>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Simulador de Dilemas Éticos Digitales</h4>
+                        <p class="text-xs text-slate-400">Un compañero de tu aula está haciendo cyberbullying en un grupo de chat institucional. ¿Qué valor aplicas y qué decisión tomas?</p>
+                        
+                        <div class="space-y-2">
+                            <button onclick="chooseEthicalOption('A')" class="w-full text-left bg-space-900 hover:bg-space-800 border border-space-700 p-3 rounded-lg text-xs text-slate-300 transition-all duration-200">
+                                <strong class="text-cyber-pink block uppercase mb-1">Opción A: Ignorarlo (Falta de Autocontrol y Solidaridad)</strong>
+                                No digo nada para evitar conflictos interpersonales en el aula de clases.
+                            </button>
+                            <button onclick="chooseEthicalOption('B')" class="w-full text-left bg-space-900 hover:bg-space-800 border border-space-700 p-3 rounded-lg text-xs text-slate-300 transition-all duration-200">
+                                <strong class="text-cyber-yellow block uppercase mb-1">Opción B: Enfrentamiento Hostil (Sin Comunicación Asertiva)</strong>
+                                Le insulto públicamente en el grupo de chat para que se detenga de inmediato.
+                            </button>
+                            <button onclick="chooseEthicalOption('C')" class="w-full text-left bg-space-900 hover:bg-space-800 border border-space-700 p-3 rounded-lg text-xs text-slate-300 transition-all duration-200">
+                                <strong class="text-cyber-emerald block uppercase mb-1">Opción C: Intervención Promotora (Empatía y Responsabilidad)</strong>
+                                Hablo asertivamente con el compañero de manera privada y, si persiste, lo reporto de manera transparente y constructiva con el Ing. César Godoy.
+                            </button>
+                        </div>
+                        <div id="ethical-result" class="hidden p-3 rounded-lg text-xs mt-3"></div>
+                    </div>
+                `
+            },
+            {
+                number: 3,
+                title: "Sedentarismo vs Vida Activa",
+                subtitle: "Análisis del scroll infinito y la desconexión digital de bienestar (Parte I)",
+                reward: "2 períodos de 40m",
+                hours: 6,
+                icon: "fa-solid fa-mobile-retro",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            La hiperconectividad y el diseño de aplicaciones para atraparte mediante el <strong>"Scroll Infinito"</strong> generan altísimos niveles de inactividad física (sedentarismo digital) en los jóvenes de Esmeraldas.
+                        </p>
+                        <div class="bg-space-850 p-4 rounded-xl border border-space-700/50 space-y-2">
+                            <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech">Las 10 Habilidades para la Vida (OMS)</h4>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">
+                                Para combatir la inercia digital, usamos: <strong>Autoconocimiento, Empatía, Comunicación Asertiva, Relaciones Interpersonales, Toma de Decisiones, Solución de Problemas, Pensamiento Creativo, Pensamiento Crítico, Manejo de Emociones</strong> y <strong>Manejo de Tensiones</strong>.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Simulador de Desintoxicación Digital</h4>
+                        <p class="text-xs text-slate-400">Verifica cómo se reducen los impulsos biológicos de dopamina al aplicar pausas activas físicas.</p>
+                        
+                        <div class="flex items-center justify-between bg-space-900 p-3 rounded-lg border border-space-750">
+                            <div>
+                                <span class="text-xs block text-slate-400 font-semibold uppercase">Nivel de Dopamina Social:</span>
+                                <span id="dopamine-val" class="text-sm font-tech text-cyber-pink font-bold">100% (Hiperconectado)</span>
+                            </div>
+                            <button onclick="applyActiveBreak()" class="px-4 py-2 bg-cyber-emerald hover:bg-emerald-600 text-space-950 font-bold uppercase text-[10px] rounded-lg transition-all duration-300 tracking-wider">
+                                Aplicar Pausa Activa (Movimiento)
+                            </button>
+                        </div>
+                        <div class="w-full bg-space-950 h-2 rounded-full overflow-hidden">
+                            <div id="dopamine-bar" class="bg-gradient-to-r from-cyber-neon to-cyber-pink h-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 4,
+                title: "Fisiología de la Hiperconectividad",
+                subtitle: "Impacto biopsicosocial de pantallas en el rendimiento académico (Parte II)",
+                reward: "2 períodos de 40m",
+                hours: 8,
+                icon: "fa-solid fa-brain",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ¿Por qué nos cuesta tanto dejar el teléfono? Estudiamos las estadísticas del <strong>INEC y la OMS</strong> en el territorio ecuatoriano sobre el impacto cerebral y muscular del sedentarismo tecnológico.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="bg-space-850 p-3 rounded-xl border border-space-700/50">
+                                <h5 class="text-xs font-bold text-cyber-pink mb-1"><i class="fa-solid fa-triangle-exclamation"></i> Consecuencias Físicas</h5>
+                                <p class="text-[10px] text-slate-400">Dolores posturales cervicales, fatiga visual digital, insomnio de fase y atrofia metabólica.</p>
+                            </div>
+                            <div class="bg-space-850 p-3 rounded-xl border border-space-700/50">
+                                <h5 class="text-xs font-bold text-cyber-neon mb-1"><i class="fa-solid fa-battery-half"></i> Impacto Académico</h5>
+                                <p class="text-[10px] text-slate-400">Pérdida drástica del lapso de concentración inmediata, dispersión mental e hiperestimulación dopaminérgica.</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Test de Dependencia al Celular</h4>
+                        <div class="space-y-3" id="screen-test-box">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="test-q1" class="accent-cyber-purple w-4 h-4" onchange="checkDependence()">
+                                <label for="test-q1" class="text-xs text-slate-300">¿Revisas el celular apenas abres los ojos al despertar?</label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="test-q2" class="accent-cyber-purple w-4 h-4" onchange="checkDependence()">
+                                <label for="test-q2" class="text-xs text-slate-300">¿Sientes ansiedad si te alejas de tu dispositivo por una hora?</label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="test-q3" class="accent-cyber-purple w-4 h-4" onchange="checkDependence()">
+                                <label for="test-q3" class="text-xs text-slate-300">¿Haces scroll en redes mientras estás comiendo o estudiando?</label>
+                            </div>
+                            <div class="bg-space-900 p-3 rounded-lg border border-space-700 text-center">
+                                <span class="text-xs text-slate-400 block uppercase font-bold">Diagnóstico Estimado</span>
+                                <span id="dependence-result" class="text-sm font-tech text-cyber-emerald font-bold mt-1">Nivel: Óptimo</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 5,
+                title: "Investigación Diagnóstica",
+                subtitle: "Diseño y tabulación de encuestas digitales de hábitos tecnológicos",
+                reward: "2 períodos de 40m",
+                hours: 10,
+                icon: "fa-solid fa-chart-line",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            No podemos sanar lo que no diagnosticamos. En esta etapa, el curso de <strong>2do E de Bachillerato</strong> diseña herramientas estadísticas de encuestas utilizando Google Forms para evaluar la hiperconectividad real dentro de nuestra institución educativa.
+                        </p>
+                        <div class="bg-gradient-to-r from-space-900 to-space-850 p-3 rounded-xl border border-space-700/50">
+                            <strong class="text-xs text-cyber-neon block uppercase font-tech mb-1">Variables Clave de Medición:</strong>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Horas de pantalla diarias • Tipo de contenido preferido • Frecuencia de ejercicio de activación física • Calidad percibida del sueño.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Generador de Gráficos de Hábitos (2do E)</h4>
+                        <p class="text-xs text-slate-400">Modifica el parámetro de horas promedio en pantalla de los estudiantes del Sagrado Corazón para recalcular su energía vital.</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-300">Horas diarias de pantalla (Promedio):</span>
+                                <span id="hours-screen-val" class="font-bold text-cyber-purple">6 Horas</span>
+                            </div>
+                            <input type="range" id="hours-screen" min="1" max="12" step="1" value="6" oninput="updateDiagnosticsChart()" class="w-full h-1 bg-space-900 rounded-lg appearance-none cursor-pointer accent-cyber-purple">
+                        </div>
+
+                        <!-- Mini Interactive SVG Bar Graph -->
+                        <div class="bg-space-900 p-4 rounded-xl border border-space-750 flex flex-col items-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">Impacto en la Energía Vital</span>
+                            <div class="flex items-end justify-center gap-6 h-28 w-full border-b border-space-700 pb-1">
+                                <div class="flex flex-col items-center">
+                                    <div id="bar-energy" class="bg-cyber-emerald w-8 rounded-t transition-all duration-300" style="height: 70px;"></div>
+                                    <span class="text-[9px] text-slate-400 mt-1 uppercase font-semibold">Energía</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div id="bar-sleep" class="bg-cyber-neon w-8 rounded-t transition-all duration-300" style="height: 60px;"></div>
+                                    <span class="text-[9px] text-slate-400 mt-1 uppercase font-semibold">Sueño</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div id="bar-posture" class="bg-cyber-pink w-8 rounded-t transition-all duration-300" style="height: 40px;"></div>
+                                    <span class="text-[9px] text-slate-400 mt-1 uppercase font-semibold">Salud Fí.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 6,
+                title: "Planificación de Redes",
+                subtitle: "Construcción de un plan editorial de difusión masiva contra el sedentarismo",
+                reward: "2 períodos de 40m",
+                hours: 12,
+                icon: "fa-solid fa-calendar-days",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Es momento de planificar la artillería comunicacional. Diseñamos un <strong>Plan Editorial (Content Plan)</strong> para balancear y programar infografías, desafíos activos corporativos y contenidos visuales que promuevan la salud en las plataformas digitales estudiantiles.
+                        </p>
+                        <div class="bg-space-850 p-4 rounded-xl border border-space-700/50 space-y-2">
+                            <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech">Formatos Educomunicativos</h4>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">
+                                <strong>Reels & TikToks:</strong> Mensajes dinámicos de menos de un minuto. <br>
+                                <strong>Infografías:</strong> Datos rápidos basados en el MSP y OMS sobre postura ergonómica. <br>
+                                <strong>Desafíos:</strong> Campañas de "Cero Pantallas en el Almuerzo".
+                            </p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Planificador Editorial Interactivo</h4>
+                        <p class="text-xs text-slate-400">Asigna las temáticas ideales a los días de la semana de lanzamiento de tu campaña digital.</p>
+                        
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                            <div class="bg-space-900 border border-space-700 p-2.5 rounded-lg flex flex-col justify-between h-20">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Lunes</span>
+                                <span class="text-[11px] text-cyber-neon font-semibold" id="day-mon">TikTok de Pausas</span>
+                                <button onclick="rotateDay('mon')" class="text-[9px] text-cyber-purple underline cursor-pointer">Cambiar</button>
+                            </div>
+                            <div class="bg-space-900 border border-space-700 p-2.5 rounded-lg flex flex-col justify-between h-20">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Miércoles</span>
+                                <span class="text-[11px] text-cyber-emerald font-semibold" id="day-wed">Infografía de Postura</span>
+                                <button onclick="rotateDay('wed')" class="text-[9px] text-cyber-purple underline cursor-pointer">Cambiar</button>
+                            </div>
+                            <div class="bg-space-900 border border-space-700 p-2.5 rounded-lg flex flex-col justify-between h-20">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Viernes</span>
+                                <span class="text-[11px] text-cyber-pink font-semibold" id="day-fri">Desafío Desconexión</span>
+                                <button onclick="rotateDay('fri')" class="text-[9px] text-cyber-purple underline cursor-pointer">Cambiar</button>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 7,
+                title: "Guionismo de Cabina",
+                subtitle: "Redacción de guiones y libretos técnicos para la cabina digital",
+                reward: "2 períodos de 40m",
+                hours: 14,
+                icon: "fa-solid fa-file-signature",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Un buen audio empieza con un libreto preciso. Estudiamos las estructuras del libreto técnico-literario de radio: control de efectos especiales, transiciones de fondo, cortinillas musicales, guión del locutor e incentivos de llamada a la acción (CTA).
+                        </p>
+                        <div class="bg-gradient-to-r from-space-900 to-space-850 border-l-4 border-cyber-emerald p-4 rounded-r-xl">
+                            <strong class="text-xs text-cyber-emerald uppercase block font-tech mb-1">Estructura Mínima del Libreto Técnico</strong>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                <strong>1. Entrada:</strong> Cortinilla de inicio (FADE IN). <br>
+                                <strong>2. Gancho:</strong> Pregunta movilizadora sobre hábitos de redes. <br>
+                                <strong>3. Núcleo:</strong> Explicación de 1 habilidad de autocontrol para la vida. <br>
+                                <strong>4. CTA:</strong> Llamado a la acción (FADE OUT).
+                            </p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Teleprompter de Cabina Virtual</h4>
+                        <p class="text-xs text-slate-400">Presiona el botón de reproducción para simular un teleprompter de lectura y sincronización de podcast escolar.</p>
+                        
+                        <div class="bg-space-950 p-4 rounded-xl border border-space-700 h-24 overflow-y-auto font-mono text-xs text-cyber-neon leading-relaxed relative" id="teleprompter-box">
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-space-950/80 pointer-events-none"></div>
+                            <div id="teleprompter-text" class="transition-all duration-1000 ease-linear">
+                                [CONTROL: CORTINILLA INICIO DE CABINA DE 2DO E - SUBE VOLUMEN Y BAJA A FONDO]<br>
+                                LOCUTOR: ¡Hola, comunidad del Sagrado Corazón! ¿Sabías que pasar más de 4 horas diarias en redes altera tus patrones de sueño? Hoy, como promotores de salud de PPE, te invitamos a tomar una pausa activa de 5 minutos. ¡Desconéctate para reconectar!<br>
+                                [CONTROL: CORTINILLA FINAL Y FADE OUT]
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="toggleTeleprompter()" id="prompter-btn" class="px-4 py-2 bg-cyber-purple text-white hover:bg-purple-600 rounded-lg text-xs font-bold transition-all duration-200">
+                                <i class="fa-solid fa-play"></i> Iniciar Desplazamiento
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 8,
+                title: "Edición Tecnológica",
+                subtitle: "Edición de audio y video con software libre (CapCut, Audacity, Canva)",
+                reward: "2 períodos de 40m",
+                hours: 16,
+                icon: "fa-solid fa-sliders",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Es hora de pulir tus pistas. En esta semana manipulamos herramientas libres de edición como <strong>CapCut, Audacity o Canva</strong> para eliminar ruidos extraños de ambiente, regular ecualizadores, insertar música ambiental de libre copyright y estructurar las pistas de voz y efectos estéticos de sonido.
+                        </p>
+                        <div class="bg-space-850 p-3 rounded-xl border border-space-700/50 flex items-center justify-between">
+                            <div class="text-xs">
+                                <span class="text-cyber-purple font-bold block">Limpieza de Audio</span>
+                                <span class="text-[10px] text-slate-400">Elimina las frecuencias parásitas en tu pista.</span>
+                            </div>
+                            <span class="text-lg text-cyber-purple"><i class="fa-solid fa-waveform-lines"></i></span>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Mezclador de Frecuencia Simulado</h4>
+                        <p class="text-xs text-slate-400">Experimenta reduciendo el nivel de ruido estático de fondo de tu micrófono en la consola.</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300">Volumen Voz Locutor:</span>
+                                <span id="vol-vox" class="font-bold text-cyber-emerald">80%</span>
+                            </div>
+                            <input type="range" id="input-vox" min="0" max="100" value="80" oninput="updateAudioMix()" class="w-full h-1 bg-space-900 rounded-lg appearance-none cursor-pointer accent-cyber-emerald">
+                            
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-300">Filtro Reductor de Ruido Externo (Noise Gate):</span>
+                                <span id="vol-noise" class="font-bold text-cyber-pink">Máximo</span>
+                            </div>
+                            <input type="range" id="input-noise" min="0" max="100" value="95" oninput="updateAudioMix()" class="w-full h-1 bg-space-900 rounded-lg appearance-none cursor-pointer accent-cyber-pink">
+                        </div>
+
+                        <div class="bg-space-900 p-3 rounded-lg border border-space-750 flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-semibold uppercase">Calidad de Salida de Audio:</span>
+                            <span id="mix-quality" class="text-xs font-tech font-bold text-cyber-emerald">Estéreo Claro (HIFI)</span>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 9,
+                title: "Pilotaje en Cabina Digital",
+                subtitle: "Simulación de flujos de grabación y monitoreo técnico real",
+                reward: "2 períodos de 40m",
+                hours: 18,
+                icon: "fa-solid fa-headset",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ¡La gran prueba de fuego! Ponemos a prueba la <strong>Cabina Digital Escolar</strong>. Nos organizamos en equipos con roles preestablecidos: director, sonidista, locutores de control y panel de retroalimentación crítica mutua de los productos generados de concientización social.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-center text-xs">
+                            <div class="bg-space-850 p-2.5 rounded-xl border border-space-700/50">
+                                <strong class="text-cyber-neon font-tech block">Locutor</strong>
+                                <p class="text-[9px] text-slate-400 mt-0.5">Control de modulación, dicción y carisma.</p>
+                            </div>
+                            <div class="bg-space-850 p-2.5 rounded-xl border border-space-700/50">
+                                <strong class="text-cyber-purple font-tech block">Sonidista</strong>
+                                <p class="text-[9px] text-slate-400 mt-0.5">Efectos especiales, ecualización y transiciones.</p>
+                            </div>
+                            <div class="bg-space-850 p-2.5 rounded-xl border border-space-700/50">
+                                <strong class="text-cyber-emerald font-tech block">Director</strong>
+                                <p class="text-[9px] text-slate-400 mt-0.5">Control del cronograma de emisión y guión final.</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Consola On-Air "Sagrado Corazón"</h4>
+                        <p class="text-xs text-slate-400">Presiona los botones para simular la transmisión desde la consola de mezcla principal.</p>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="btn-mic" onclick="toggleConsolaButton('mic')" class="bg-space-900 border border-space-700 hover:border-cyber-purple p-4 rounded-xl flex flex-col items-center gap-2 transition-all duration-200">
+                                <i class="fa-solid fa-microphone text-xl text-slate-400" id="icon-mic"></i>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300" id="label-mic">Mic: Desactivado</span>
+                            </button>
+                            <button id="btn-live" onclick="toggleConsolaButton('live')" class="bg-space-900 border border-space-700 hover:border-cyber-pink p-4 rounded-xl flex flex-col items-center gap-2 transition-all duration-200">
+                                <i class="fa-solid fa-tower-broadcast text-xl text-slate-400" id="icon-live"></i>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300" id="label-live">Señal: Fuera del Aire</span>
+                            </button>
+                        </div>
+                        <div id="consola-status" class="hidden text-center text-xs p-2 rounded-lg bg-cyber-pink/20 text-cyber-pink border border-cyber-pink/30 font-bold uppercase tracking-widest animate-pulse">
+                            ¡La Cabina de 2do E está emitiendo en directo!
+                        </div>
+                    </div>
+                `
+            },
+            {
+                number: 10,
+                title: "Sistematización y Cierre",
+                subtitle: "Sistematización del Plan de Acción y cierre de portafolio de información",
+                reward: "2 períodos de 40m",
+                hours: 20,
+                icon: "fa-solid fa-box-archive",
+                concept: `
+                    <div class="space-y-4">
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Has llegado al final de la Fase de Información de Participación Estudiantil. Ahora consolidamos las 10 bitácoras validadas junto con el Plan de Acción que guiará el proyecto de salud y bienestar del <strong>2do E de Bachillerato</strong>.
+                        </p>
+                        <div class="bg-space-850 p-4 rounded-xl border border-space-700/50 text-center">
+                            <span class="text-cyber-emerald text-2xl block mb-2"><i class="fa-solid fa-clipboard-check"></i></span>
+                            <strong class="text-xs font-tech text-white uppercase block mb-1">¡Portafolio Completo!</strong>
+                            <p class="text-[11px] text-slate-400 max-w-md mx-auto">Tus 10 bitácoras (20 horas validadas en total) se encuentran integradas y listas para la firma oficial de aprobación institucional.</p>
+                        </div>
+                    </div>
+                `,
+                interactiveHTML: `
+                    <div class="bg-space-850 border border-space-700 p-4 rounded-xl space-y-4">
+                        <h4 class="text-xs uppercase font-bold text-cyber-neon font-tech tracking-wider">Firma Digital del Estudiante Promotor</h4>
+                        <p class="text-xs text-slate-400">Usa el mouse o tu pantalla táctil en el recuadro para firmar digitalmente tu portafolio de PPE.</p>
+                        
+                        <div class="border-2 border-dashed border-space-700 bg-space-950 rounded-xl h-28 relative cursor-crosshair flex items-center justify-center overflow-hidden" id="signature-pad" onmousedown="startDrawing()" onmousemove="draw(event)" onmouseup="stopDrawing()" onmouseleave="stopDrawing()" ontouchstart="startDrawingTouch(event)" ontouchmove="drawTouch(event)" ontouchend="stopDrawing()">
+                            <canvas id="signature-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+                            <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest select-none" id="signature-placeholder">Dibuja tu firma aquí</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <button onclick="clearSignature()" class="text-xs text-cyber-pink hover:underline">Borrar Firma</button>
+                            <button onclick="saveAndCompletePPE()" class="px-4 py-2 bg-cyber-emerald text-space-950 hover:bg-emerald-600 font-bold uppercase text-xs rounded-xl transition-all duration-200">
+                                Certificar y Finalizar
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // Database from the PDF file PLANIFICACIÒN- FASE DE INFORMACIÓN 2E BGU.pdf
+        const PLANNING_ROWS = [
+            {
+                week: "Semana 1",
+                topic: "Socialización de lineamientos del programa de participación estudiantil. Inducción del proyecto de PPE para 2do. E BGU",
+                destreza: "Comprender el marco normativo, objetivos y fases del PPE para reconocer la responsabilidad social y el compromiso ciudadano como promotores comunitarios.",
+                indicador: "Conoce la normativa legal aplicable (LOEI), la duración del programa (80 horas en 2do) y la ponderación de la nota (10% de la nota de grado) del PPE.",
+                estrategias: "Lluvia de ideas digital: ¿Qué sabes del PPE? Encuesta diagnóstica sobre normativa y participación. Plenaria virtual en Classroom para contrastar saberes con la LOEI. Presentación del reglamento, duración, ponderación y convalidaciones. Glosario digital colaborativo en el Aula Virtual. Registro de compromisos iniciales en Bitácora.",
+                tecnicas: "Técnica: Análisis de producciones.<br>Instrumento: Registro individual en la Bitácora digital de PPE N° 1 (Resumen de lineamientos y compromisos)."
+            },
+            {
+                week: "Semana 2",
+                topic: "Descripción de los valores humanos: Respeto, Responsabilidad, Empatía, Solidaridad, Honestidad, Tolerancia, Trabajo en equipo, Comunicación asertiva, Justicia y Autocontrol.",
+                destreza: "Respeto: Aceptar y valorar a los demás. Responsabilidad: Cumplir compromisos y asumir consecuencias. Empatía: Entender emociones ajenas. Solidaridad: Colaborar desinteresadamente. Honestidad: Actuar con verdad y sinceridad. Tolerancia: Aceptar opiniones diferentes. Trabajo en equipo: Cooperar. Comunicación asertiva: Expresarse con respeto. Justicia: Igualdad. Autocontrol: Manejar emociones.",
+                indicador: "Distingue y analiza de forma asertiva la aplicación práctica de los valores de empatía, solidaridad y ética en los procesos de comunicación comunitaria.",
+                estrategias: "Presentación de dilemas éticos juveniles reales (cyberbullying, desinformación). Respuesta anónima vía App en línea sobre qué valor aplicar. Análisis grupal de consecuencias de la ausencia de valores en redes. Manifiesto Ético cooperativo en Google Docs. Autoevaluación en Bitácora.",
+                tecnicas: "Técnica: Observación sistemática.<br>Instrumento: Registro de criterios éticos en la Bitácora de PPE N° 2 (Autoevaluación del perfil axiológico)."
+            },
+            {
+                week: "Semana 3",
+                topic: "Salud, Bienestar Social y Habilidades para la Vida contra el Sedentarismo Digital (Parte I)",
+                destreza: "Investigar el impacto biopsicosocial de la hiperconectividad en redes sociales, estructurando soluciones activas y preventivas basadas en habilidades para la vida.",
+                indicador: "Sintetiza de forma autónoma alternativas prácticas de movimiento físico y desconexión digital aptas para ser traducidas a formatos de comunicación social.",
+                estrategias: "Metacognición: registrar cuántas veces revisaron el celular en la última hora. Video demostrativo sobre efectos del scroll infinito en el sedentarismo. Debate: ¿Las pausas activas son suficientes? Taller sobre pautas del MinEduc contra el sedentarismo. Sistematización de las 10 habilidades de la OPS/OMS.",
+                tecnicas: "Técnica: Ejercicio práctico de análisis conceptual.<br>Instrumento: Esquema técnico de soluciones contra el sedentarismo por hiperconectividad en Bitácora de PPE N° 4."
+            },
+            {
+                week: "Semana 4",
+                topic: "Salud, Bienestar Social y Habilidades para la Vida contra el Sedentarismo Digital (Parte II)",
+                destreza: "Investigar el impacto biopsicosocial de la hiperconectividad en redes sociales, estructurando soluciones activas y preventivas basadas en habilidades para la vida.",
+                indicador: "Sintetiza de forma autónoma alternativas prácticas de movimiento físico y desconexión digital aptas para ser traducidas a formatos de comunicación social.",
+                estrategias: "Contraste metacognitivo de esquemas previos. Estadísticas del INEC/OMS sobre sedentarismo en adolescentes ecuatorianos. Análisis de mecanismos fisiológicos del sedentarismo y su impacto académico (OPS/MSP). Mapa conceptual digital colaborativo. Actualización de Bitácora.",
+                tecnicas: "Técnica: Ejercicio práctico de análisis conceptual.<br>Instrumento: Esquema técnico de soluciones contra el sedentarismo en Bitácora de PPE N° 4."
+            },
+            {
+                week: "Semana 5",
+                topic: "Investigación de Campo: Diagnóstico Digital de Hábitos e Inactividad Física",
+                destreza: "Diseñar y ejecutar herramientas web estadísticas para tabular los niveles reales de sedentarismo y tiempos de pantalla en la comunidad educativa.",
+                indicador: "Genera, procesa e interpreta de manera analítica gráficos estadísticos informáticos que evidencian la problemática de la hiperconectividad escolar.",
+                estrategias: "Revisión de encuestas de la OMS sobre actividad física en adolescentes. Definición de variables a medir (tiempo de pantalla, actividad física, sueño). Diseño colectivo de formulario Google Forms. Aplicación masiva por canales institucionales. Lectura crítica de gráficos automáticos.",
+                tecnicas: "Técnica: Análisis estadístico aplicado.<br>Instrumento: Informe gráfico de diagnóstico informático institucional en la Bitácora de PPE N° 5."
+            },
+            {
+                week: "Semana 6",
+                topic: "Planificación Estratégica en Redes Sociales: Espacios de Concienciación",
+                destreza: "Estructurar una campaña editorial multimedia cronometrada utilizando herramientas digitales para transformar las plataformas virtuales en entornos de impacto positivo.",
+                indicador: "Desarrolla con criterio técnico un calendario de publicaciones (Content Plan) balanceando las problemáticas estadísticas detectadas con soluciones.",
+                estrategias: "Análisis de cuentas de salud en redes (Mineduc, MSP, OPS). Exposición sobre enganche orgánico y formatos educomunicativos (Reels, infografías, desafíos). Principios del Content Plan: frecuencia, línea gráfica, colores institucionales. Construcción de matriz validada.",
+                tecnicas: "Técnica: Planificación colaborativa virtual.<br>Instrumento: Matriz del Plan Editorial para Redes Sociales validado en Bitácora de PPE N° 6."
+            },
+            {
+                week: "Semana 7",
+                topic: "Guionismo Educomunicativo y Libretos Técnicos para la Cabina Digital",
+                destreza: "Redactar libretos técnicos literarios orientados a la producción en cabina digital, garantizando un lenguaje fluido, juvenil y con fuerte base preventiva.",
+                indicador: "Escribe guiones multimedia pautando con precisión la entrada de audios, diálogos informativos, cortinillas sonoras y llamados a la acción eficaces.",
+                estrategias: "Escucha activa de un podcast juvenil referente. Juego de roles: frase de apertura sin guión para verificar duración idónea según métricas. Co-creación en Google Docs del libreto técnico-literario (apertura, cortinillas, cuerpo, efectos, CTA). Lecciones en Bitácora.",
+                tecnicas: "Técnica: Evaluación de producción de textos multimedia.<br>Instrumento: Libreto técnico-literario aprobado para grabación en la Bitácora de PPE N° 7."
+            },
+            {
+                week: "Semana 8",
+                topic: "Producción Tecnológica: Edición de Audio y Video",
+                destreza: "Operar aplicaciones informáticas de edición libre (CapCut, Audacity, Canva) para el desarrollo de salud y bienestar mediante habilidades psicofísicas.",
+                indicador: "Aplica habilidades informáticas avanzadas al unificar pistas de voz, música de fondo libre de copyright y transiciones de video dinámicas con criterio estético.",
+                estrategias: "Demostración práctica de CapCut, Audacity, Canva por estudiantes destacados. Exploración libre: importar audio y aplicar filtros. Taller de ecualización de voz, remoción de ruido ambiental, masterización básica y ensamble de pistas de audio libres de derechos.",
+                tecnicas: "Técnica: Demostración práctica en plataforma interactiva.<br>Instrumento: Producto multimedia piloto o maqueta transitoria en la Bitácora de PPE N° 8."
+            },
+            {
+                week: "Semana 9",
+                topic: "Pilotaje Operativo y Simulación de Transmisión desde la Cabina Digital",
+                destreza: "Coordinar con autoridades el espacio físico, hardware y software de la cabina digital a utilizarse en una sesión simulada y real de transmisión.",
+                indicador: "Demuestra control operativo y liderazgo situacional al ejecutar los flujos de grabación y monitoreo técnico de los productos de concienciación social.",
+                estrategias: "Recorrido de reconocimiento de la cabina: hardware, software y flujo de señal. Asignación de roles según destrezas (director, sonidista, locutores). Simulación real: cada estudiante ejecuta su rol y flujo. Grabación de primer episodio radial/podcast.",
+                tecnicas: "Técnica: Simulación de procesos bajo entornos reales.<br>Instrumento: Rúbrica técnica de desempeño operativo de la cabina en la Bitácora de PPE N° 9."
+            },
+            {
+                week: "Semana 10",
+                topic: "Sistematización del Plan de Acción y Cierre de Portafolio de Información",
+                destreza: "Sistematizar el Plan de Acción general del aula integrando metodológicamente los diagnósticos, guiones y recursos multimedia construidos para la Fase de Ejecución.",
+                indicador: "Consolida el portafolio digital de evidencias de la Fase de Información demostrando orden, calidad técnica y compromiso social.",
+                estrategias: "Revisión de bitácoras 1-9: identificar evidencia más significativa. Línea de tiempo colaborativa. Control de calidad de portafolios frente a indicadores PPE. Estructuración formal del Plan de Acción definitivo. Firma electrónica de los planes de acción para ejecución.",
+                tecnicas: "Técnica: Evaluación de portafolio integral informatizado.<br>Instrumento: Portafolio Digital de PPE validado (Bitácoras 1-10) y Plan de Acción formal de curso."
+            }
+        ];
+
+        // Global State variables
+        let currentSelectedWeek = 1;
+        let currentTab = 'concept';
+        let currentHours = 0;
+        let completedMissions = {};
+
+        // Canvas Drawing state
+        let isDrawing = false;
+        let canvas, ctx_canvas;
+
+        // Protection against source code inspection, context menu and source saving
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            synthesizeSound('fail');
+            alertBox("🔐 SISTEMA PROTEGIDO: El clic derecho e inspección de elementos están deshabilitados por seguridad institucional de la U.E.F. Sagrado Corazón.");
+        });
+
+        document.addEventListener('keydown', function(e) {
+            // Block F12 (123), Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U (Source code), Ctrl+S (Save page)
+            const isInspectKeys = 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) ||
+                (e.key === 'F12' || e.keyCode === 123);
+
+            if (isInspectKeys) {
+                e.preventDefault();
+                synthesizeSound('fail');
+                alertBox("🔒 ACCESO RESTRINGIDO: No está permitido inspeccionar, guardar ni modificar el código de la cabina digital de 2do E.");
+                return false;
+            }
+        });
+
+        // Sound Synthesis Engine via Web Audio API (No outside resources/URLs needed!)
+        function synthesizeSound(type) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const audioCtx = new AudioContext();
+                
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                if (type === 'success') {
+                    // Gaming leveling up tone
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.35); // C6
+                    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                } else if (type === 'warning') {
+                    // Alert sonar sound
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(330, audioCtx.currentTime); // E4
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime + 0.15); // A3
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'cyber') {
+                    // Tech diagnostic beep
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+                    osc.frequency.setValueAtTime(1760, audioCtx.currentTime + 0.08); // A6
+                    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'fail') {
+                    // Error buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+                }
+            } catch (e) {
+                console.log("Audio Context not allowed or initialized yet.");
+            }
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            renderWeekTabs();
+            renderPlanningTable();
+            selectWeek(1);
+            calculateLOEI();
+        }
+
+        // Render Left Mission Selection Tabs
+        function renderWeekTabs() {
+            const container = document.getElementById('week-tabs-container');
+            container.innerHTML = '';
+            
+            WEEKS_DATA.forEach(week => {
+                const isCompleted = completedMissions[week.number];
+                const activeClass = week.number === currentSelectedWeek 
+                    ? 'border-cyber-purple bg-gradient-to-r from-space-800 to-space-900 shadow-md animate-pulse' 
+                    : 'border-transparent bg-space-950/40 hover:bg-space-900/50';
+
+                const completeBadge = isCompleted 
+                    ? '<span class="text-[9px] font-bold text-cyber-emerald bg-cyber-emerald/10 border border-cyber-emerald/30 px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i> 2h</span>'
+                    : `<span class="text-[9px] font-bold text-slate-500 group-hover:text-cyber-purple transition-colors duration-200">${week.reward}</span>`;
+
+                container.innerHTML += `
+                    <button onclick="selectWeek(${week.number})" class="w-full text-left p-3 rounded-xl border flex items-center justify-between gap-3 group transition-all duration-300 ${activeClass}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg ${week.number === currentSelectedWeek ? 'bg-cyber-purple text-white shadow-md' : 'bg-space-800 text-slate-400 group-hover:text-cyber-purple'} flex items-center justify-center text-sm transition-all duration-300">
+                                <i class="${week.icon}"></i>
+                            </div>
+                            <div>
+                                <span class="text-[9px] text-slate-500 block font-bold uppercase tracking-wider">Semana ${week.number}</span>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white block truncate w-32">${week.title}</span>
+                            </div>
+                        </div>
+                        ${completeBadge}
+                    </button>
+                `;
+            });
+        }
+
+        // Populate the planning matrix table with exact data from PDF
+        function renderPlanningTable() {
+            const container = document.getElementById('planning-table-rows');
+            container.innerHTML = '';
+            
+            PLANNING_ROWS.forEach(row => {
+                container.innerHTML += `
+                    <tr class="hover:bg-space-850/40 transition-colors duration-150">
+                        <td class="p-3 font-tech text-cyber-neon border-r border-space-700/20 align-top">${row.week}</td>
+                        <td class="p-3 font-semibold text-slate-100 border-r border-space-700/20 align-top max-w-[180px]">${row.topic}</td>
+                        <td class="p-3 border-r border-space-700/20 align-top max-w-[200px]">${row.destreza}</td>
+                        <td class="p-3 border-r border-space-700/20 align-top max-w-[150px] text-slate-400 italic">${row.indicador}</td>
+                        <td class="p-3 border-r border-space-700/20 align-top max-w-[220px]">${row.estrategias}</td>
+                        <td class="p-3 align-top max-w-[150px] text-cyber-emerald font-semibold">${row.tecnicas}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Toggle modal visibility for curriculum planning
+        function togglePlanningModal(show) {
+            synthesizeSound('cyber');
+            const modal = document.getElementById('planning-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Select specific week and update the view context
+        function selectWeek(num) {
+            currentSelectedWeek = num;
+            const week = WEEKS_DATA.find(w => w.number === num);
+            
+            // Play futuristic UI sound effect
+            synthesizeSound('cyber');
+
+            // Update Left Sidebar Selection styling
+            renderWeekTabs();
+
+            // Populate Quest Card Detail Data
+            document.getElementById('quest-badge').innerText = `Semana ${num} • Fase 1`;
+            document.getElementById('quest-title').innerText = week.title;
+            document.getElementById('quest-reward').innerText = "2 períodos de 40m";
+            
+            // Icon container styling
+            const iconContainer = document.getElementById('quest-icon-container');
+            iconContainer.innerHTML = `<i class="${week.icon}"></i>`;
+
+            // Reset tabs to concept as default
+            switchContentTab('concept');
+
+            // Fill content fields
+            document.getElementById('tab-concept').innerHTML = week.concept;
+            document.getElementById('tab-interactive').innerHTML = week.interactiveHTML;
+
+            // Update custom inputs for bitacora generator automatically based on topics
+            document.getElementById('bit-week-label').innerText = `SEMANA: ${num} (2 períodos / 80 min)`;
+            updateBitacoraPlaceholder(week);
+
+            // Hide/Show success badge based on completed missions state
+            const successBanner = document.getElementById('quest-success-banner');
+            if (completedMissions[num]) {
+                successBanner.classList.remove('hidden');
+            } else {
+                successBanner.classList.add('hidden');
+            }
+
+            // Setup specific actions of Week 10 (canvas signature rendering) if it is opened
+            if (num === 10) {
+                setTimeout(initializeSignaturePad, 100);
+            }
+        }
+
+        // Tab switcher within a week mission
+        function switchContentTab(tabId) {
+            currentTab = tabId;
+            synthesizeSound('cyber');
+
+            // Tabs button design adjustment
+            const tabs = ['concept', 'interactive', 'bitacora'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabId) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-transparent bg-cyber-purple text-white shadow-md";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-space-700 text-slate-400 hover:text-slate-200 hover:bg-space-800";
+                }
+
+                // Show/hide specific content containers
+                const container = document.getElementById(`tab-${t}`);
+                if (t === tabId) {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
+            });
+        }
+
+        // Auto-populate bitacora input placeholders dynamically for each specific week
+        function updateBitacoraPlaceholder(week) {
+            const inputConcept = document.getElementById('bitacora-input-concept');
+            const inputApp = document.getElementById('bitacora-input-application');
+            
+            if (week.number === 1) {
+                inputConcept.value = "Socialización de los lineamientos del PPE correspondientes a las 80 horas obligatorias de la LOEI y su peso del 10% de la nota de grado de Bachillerato.";
+                inputApp.value = "Asumiendo mis compromisos con puntualidad y responsabilidad axiológica como promotor de salud y bienestar del 2do E.";
+            } else if (week.number === 2) {
+                inputConcept.value = "Comprensión de los 10 valores fundamentales del promotor (Respeto, Empatía, Solidaridad, Honestidad, Justicia y Autocontrol) en el entorno virtual.";
+                inputApp.value = "Previniendo el cyberbullying y adoptando la comunicación digital asertiva en mi entorno educativo e interacciones virtuales.";
+            } else if (week.number === 3) {
+                inputConcept.value = "Investigación sobre el impacto biopsicosocial de la hiperconectividad, analizando el scroll infinito como inductor del sedentarismo digital.";
+                inputApp.value = "Implementando de forma práctica pausas activas físicas diarias y habilidades psicofísicas de desconexión corporal.";
+            } else if (week.number === 4) {
+                inputConcept.value = "Estudio de las estadísticas de sedentarismo en adolescentes (INEC/OMS) y las consecuencias fisiológicas en el rendimiento académico.";
+                inputApp.value = "Diseñando mapas conceptuales que vinculen el autocontrol de tiempos de pantalla con la optimización de los ciclos del sueño.";
+            } else if (week.number === 5) {
+                inputConcept.value = "Diseño de un formulario estadístico de Google Forms para diagnosticar hábitos e inactividad física en el Sagrado Corazón.";
+                inputApp.value = "Aplicando la encuesta a mis compañeros y tabulando la información a través de gráficos informáticos que evidencian la problemática.";
+            } else if (week.number === 6) {
+                inputConcept.value = "Desarrollo de un calendario de publicaciones balanceado (Content Plan) combinando estadísticas críticas de salud con desafíos en redes.";
+                inputApp.value = "Aportando en la planificación colaborativa de nuestra matriz editorial con enfoque en Reels, infografías y retos de desconexión.";
+            } else if (week.number === 7) {
+                inputConcept.value = "Redacción colaborativa de libretos técnico-literarios estructurados con apertura, cortinillas de audio, cuerpo científico y llamado a la acción.";
+                inputApp.value = "Adaptando un tono dinámico y fluido ideal para ser transmitido de manera directa en la cabina digital institucional.";
+            } else if (week.number === 8) {
+                inputConcept.value = "Uso de herramientas libres de edición de audio (CapCut/Audacity) para la ecualización de voces, masterización y ensamble de cortinas sin copyright.";
+                inputApp.value = "Colaborando en el ensamble técnico de las maquetas de podcast piloto para garantizar un sonido nítido y claro.";
+            } else if (week.number === 9) {
+                inputConcept.value = "Simulación real de flujos de grabación, monitoreo de audio en vivo y asignación de roles técnicos de transmisión (sonidista, director, locutores).";
+                inputApp.value = "Ejecutando mi rol de liderazgo de manera integral y cooperativa para optimizar la calidad técnica de las grabaciones de salud.";
+            } else if (week.number === 10) {
+                inputConcept.value = "Sistematización metodológica del portafolio digital, consolidando mis 10 bitácoras correspondientes a la Fase de Información (20 horas).";
+                inputApp.value = "Validando y firmando de forma electrónica el Plan de Acción definitivo para dar inicio inmediato a la Fase de Ejecución.";
+            }
+            updateBitacoraPreviewLocal();
+        }
+
+        // Live locally render structured draft preview
+        function updateBitacoraPreviewLocal() {
+            const learningText = document.getElementById('bitacora-input-concept').value;
+            const applicationText = document.getElementById('bitacora-input-application').value;
+            
+            document.getElementById('preview-learning').innerText = learningText || "Escribe en el cuadro de arriba para actualizar este campo.";
+            document.getElementById('preview-application').innerText = applicationText || "Escribe en el cuadro de arriba para actualizar este campo.";
+            document.getElementById('preview-commitment').innerText = `Asumo el compromiso ético de participar activamente en la cabina digital escolar del Sagrado Corazón de Esmeraldas para reducir el impacto de la hiperconectividad virtual.`;
+        }
+
+        // Trigger complete action per week level
+        function completeMission(weekNum) {
+            if (!completedMissions[weekNum]) {
+                completedMissions[weekNum] = true;
+                currentHours += 2; // Each completed week gives exactly 2 hours (Phase 1 = 20 Hours total)
+                
+                // Audio level up play
+                synthesizeSound('success');
+
+                // UI Progress recalculations
+                updateGlobalProgressHUD();
+                renderWeekTabs();
+
+                // Show success level banner
+                document.getElementById('quest-success-banner').classList.remove('hidden');
+            }
+        }
+
+        // Recalculates total HUD items
+        function updateGlobalProgressHUD() {
+            // Track Phase 1 (20 Hours)
+            document.getElementById('global-hours').innerText = `${currentHours} / 20 Hs`;
+            
+            const progressPercent = (currentHours / 20) * 100;
+            document.getElementById('global-hours-bar').style.width = `${progressPercent}%`;
+
+            // Calculate grade multiplier: 20 hours completed in Phase 1 gives 2.50 points (representing 25% of overall 80h PPE)
+            const finalPpeGrade = (currentHours / 20) * 2.50;
+            document.getElementById('grading-percentage').innerText = `${finalPpeGrade.toFixed(2)} / 2.50 Ptos`;
+        }
+
+        // LOEI simulator math update (Week 1)
+        function calculateLOEI() {
+            const gradeVal = parseFloat(document.getElementById('input-grade').value);
+            const ppeVal = parseFloat(document.getElementById('input-ppe').value);
+            
+            document.getElementById('val-grade').innerText = `${gradeVal.toFixed(2)} / 10.00`;
+            document.getElementById('val-ppe').innerText = `${ppeVal.toFixed(2)} / 10.00`;
+
+            const total = (gradeVal * 0.9) + (ppeVal * 0.1);
+            document.getElementById('val-total').innerText = `${total.toFixed(2)} / 10.00`;
+            completeMission(1);
+        }
+
+        // Ethical scenario selection helper (Week 2)
+        function chooseEthicalOption(option) {
+            const box = document.getElementById('ethical-result');
+            box.classList.remove('hidden', 'bg-cyber-pink/20', 'bg-cyber-emerald/20', 'text-cyber-pink', 'text-cyber-emerald');
+            
+            if (option === 'A' || option === 'B') {
+                synthesizeSound('fail');
+                box.classList.add('bg-cyber-pink/20', 'text-cyber-pink', 'border', 'border-cyber-pink/30');
+                box.innerHTML = option === 'A' 
+                    ? "<strong>¡Falta de Empatía!</strong> Ignorar los problemas digitales contribuye a aumentar la toxicidad. Un verdadero promotor actúa de manera responsable." 
+                    : "<strong>¡Falta de Autocontrol!</strong> Reaccionar violentamente en los grupos de chat perpetúa la hostilidad. El autocontrol y respeto son la clave.";
+            } else {
+                synthesizeSound('success');
+                box.classList.add('bg-cyber-emerald/20', 'text-cyber-emerald', 'border', 'border-cyber-emerald/30');
+                box.innerHTML = "<strong>¡Excelente decisión!</strong> Utilizas la asertividad y los canales correctos (tutor César Godoy) para proteger éticamente el bienestar escolar de tu curso.";
+                completeMission(2);
+            }
+        }
+
+        // Dopamine track (Week 3)
+        let dopamineLevel = 100;
+        function applyActiveBreak() {
+            dopamineLevel = Math.max(10, dopamineLevel - 15);
+            const bar = document.getElementById('dopamine-bar');
+            const val = document.getElementById('dopamine-val');
+            
+            bar.style.width = `${dopamineLevel}%`;
+            
+            if (dopamineLevel > 60) {
+                val.innerText = `${dopamineLevel}% (Hiperconectado)`;
+                synthesizeSound('warning');
+            } else if (dopamineLevel > 30) {
+                val.innerText = `${dopamineLevel}% (Fase de Descompresión)`;
+                synthesizeSound('cyber');
+            } else {
+                val.innerText = `${dopamineLevel}% (Óptimo / Desconectado con Éxito)`;
+                synthesizeSound('success');
+                completeMission(3);
+            }
+        }
+
+        // Checking dependence checks (Week 4)
+        function checkDependence() {
+            const q1 = document.getElementById('test-q1').checked;
+            const q2 = document.getElementById('test-q2').checked;
+            const q3 = document.getElementById('test-q3').checked;
+            const res = document.getElementById('dependence-result');
+            
+            const count = [q1, q2, q3].filter(Boolean).length;
+            
+            res.classList.remove('text-cyber-emerald', 'text-cyber-yellow', 'text-cyber-pink');
+            
+            if (count === 0) {
+                res.innerText = "Nivel: Óptimo";
+                res.classList.add('text-cyber-emerald');
+                completeMission(4);
+            } else if (count === 1) {
+                res.innerText = "Nivel: Atención Moderada";
+                res.classList.add('text-cyber-yellow');
+                synthesizeSound('cyber');
+                completeMission(4);
+            } else {
+                res.innerText = "Nivel: Adicción Dopaminérgica Grave";
+                res.classList.add('text-cyber-pink');
+                synthesizeSound('fail');
+            }
+        }
+
+        // Diagnostics metrics simulation (Week 5)
+        function updateDiagnosticsChart() {
+            const hours = parseInt(document.getElementById('hours-screen').value);
+            document.getElementById('hours-screen-val').innerText = `${hours} Horas`;
+
+            const barEnergy = document.getElementById('bar-energy');
+            const barSleep = document.getElementById('bar-sleep');
+            const barPosture = document.getElementById('bar-posture');
+
+            // Complex physiological inverse correlations formula
+            const energyHeight = Math.max(10, 100 - (hours * 8));
+            const sleepHeight = Math.max(10, 100 - (hours * 9));
+            const healthHeight = Math.max(10, 100 - (hours * 6));
+
+            barEnergy.style.height = `${energyHeight}px`;
+            barSleep.style.height = `${sleepHeight}px`;
+            barPosture.style.height = `${healthHeight}px`;
+
+            synthesizeSound('cyber');
+            if (hours >= 3) {
+                completeMission(5);
+            }
+        }
+
+        // Planification calendar (Week 6)
+        const editorialThemes = [
+            "TikTok de Pausas", "Infografía de Postura", "Desafío Desconexión", 
+            "Consejo de Autocontrol", "Slogan sobre Sueño", "Receta Saludable"
+        ];
+        let monIdx = 0, wedIdx = 1, friIdx = 2;
+        
+        function rotateDay(day) {
+            synthesizeSound('cyber');
+            if (day === 'mon') {
+                monIdx = (monIdx + 1) % editorialThemes.length;
+                document.getElementById('day-mon').innerText = editorialThemes[monIdx];
+            } else if (day === 'wed') {
+                wedIdx = (wedIdx + 1) % editorialThemes.length;
+                document.getElementById('day-wed').innerText = editorialThemes[wedIdx];
+            } else if (day === 'fri') {
+                friIdx = (friIdx + 1) % editorialThemes.length;
+                document.getElementById('day-fri').innerText = editorialThemes[friIdx];
+            }
+            completeMission(6);
+        }
+
+        // Teleprompter reader logic (Week 7)
+        let isPrompterRunning = false;
+        let prompterInterval;
+        let scrollPos = 0;
+        
+        function toggleTeleprompter() {
+            const box = document.getElementById('teleprompter-box');
+            const btn = document.getElementById('prompter-btn');
+            
+            if (!isPrompterRunning) {
+                isPrompterRunning = true;
+                btn.innerHTML = `<i class="fa-solid fa-stop"></i> Detener`;
+                btn.className = "px-4 py-2 bg-cyber-pink text-white hover:bg-pink-600 rounded-lg text-xs font-bold transition-all duration-200";
+                synthesizeSound('success');
+                
+                prompterInterval = setInterval(() => {
+                    scrollPos += 1;
+                    box.scrollTop = scrollPos;
+                    if (box.scrollTop >= (box.scrollHeight - box.clientHeight)) {
+                        clearInterval(prompterInterval);
+                        isPrompterRunning = false;
+                        btn.innerHTML = `<i class="fa-solid fa-rotate-left"></i> Reiniciar`;
+                        btn.className = "px-4 py-2 bg-cyber-emerald text-space-950 hover:bg-emerald-600 rounded-lg text-xs font-bold transition-all duration-200";
+                        completeMission(7);
+                    }
+                }, 120);
+            } else {
+                clearInterval(prompterInterval);
+                isPrompterRunning = false;
+                btn.innerHTML = `<i class="fa-solid fa-play"></i> Continuar`;
+                btn.className = "px-4 py-2 bg-cyber-purple text-white hover:bg-purple-600 rounded-lg text-xs font-bold transition-all duration-200";
+                synthesizeSound('warning');
+            }
+        }
+
+        // Mixer monitor logic (Week 8)
+        function updateAudioMix() {
+            const vox = document.getElementById('input-vox').value;
+            const noise = document.getElementById('input-noise').value;
+            
+            document.getElementById('vol-vox').innerText = `${vox}%`;
+            document.getElementById('vol-noise').innerText = noise > 80 ? "Excelente" : noise > 40 ? "Moderado" : "Bajo (Ruidoso)";
+
+            const quality = document.getElementById('mix-quality');
+            quality.classList.remove('text-cyber-pink', 'text-cyber-yellow', 'text-cyber-emerald');
+
+            synthesizeSound('cyber');
+
+            if (vox > 50 && noise > 70) {
+                quality.innerText = "Estéreo Claro (HIFI)";
+                quality.classList.add('text-cyber-emerald');
+                completeMission(8);
+            } else if (vox < 20) {
+                quality.innerText = "Falta volumen de voz";
+                quality.classList.add('text-cyber-pink');
+            } else {
+                quality.innerText = "Presencia de siseo de fondo";
+                quality.classList.add('text-cyber-yellow');
+            }
+        }
+
+        // Live Console simulation (Week 9)
+        let micOn = false;
+        let liveOn = false;
+
+        function toggleConsolaButton(type) {
+            if (type === 'mic') {
+                micOn = !micOn;
+                const icon = document.getElementById('icon-mic');
+                const label = document.getElementById('label-mic');
+                const btn = document.getElementById('btn-mic');
+                
+                if (micOn) {
+                    synthesizeSound('success');
+                    btn.classList.add('border-cyber-purple', 'bg-cyber-purple/10');
+                    icon.className = "fa-solid fa-microphone text-xl text-cyber-purple";
+                    label.innerText = "Mic: Activo (ON AIR)";
+                } else {
+                    synthesizeSound('warning');
+                    btn.classList.remove('border-cyber-purple', 'bg-cyber-purple/10');
+                    icon.className = "fa-solid fa-microphone text-xl text-slate-400";
+                    label.innerText = "Mic: Desactivado";
+                }
+            } else if (type === 'live') {
+                liveOn = !liveOn;
+                const icon = document.getElementById('icon-live');
+                const label = document.getElementById('label-live');
+                const btn = document.getElementById('btn-live');
+                const banner = document.getElementById('consola-status');
+                
+                if (liveOn) {
+                    synthesizeSound('success');
+                    btn.classList.add('border-cyber-pink', 'bg-cyber-pink/10');
+                    icon.className = "fa-solid fa-tower-broadcast text-xl text-cyber-pink animate-pulse";
+                    label.innerText = "Señal: Al Aire (LIVE)";
+                    banner.classList.remove('hidden');
+                } else {
+                    synthesizeSound('warning');
+                    btn.classList.remove('border-cyber-pink', 'bg-cyber-pink/10');
+                    icon.className = "fa-solid fa-tower-broadcast text-xl text-slate-400";
+                    label.innerText = "Señal: Fuera del Aire";
+                    banner.classList.add('hidden');
+                }
+            }
+
+            if (micOn && liveOn) {
+                completeMission(9);
+            }
+        }
+
+        // Canvas Signature setup (Week 10)
+        function initializeSignaturePad() {
+            canvas = document.getElementById('signature-canvas');
+            if (!canvas) return;
+            
+            ctx_canvas = canvas.getContext('2d');
+            
+            // Adjust canvas to container dimensions
+            const pad = document.getElementById('signature-pad');
+            canvas.width = pad.clientWidth;
+            canvas.height = pad.clientHeight;
+
+            // Paint styles
+            ctx_canvas.strokeStyle = '#06B6D4'; // Cyan neon
+            ctx_canvas.lineWidth = 2.5;
+            ctx_canvas.lineCap = 'round';
+            ctx_canvas.lineJoin = 'round';
+        }
+
+        function startDrawing() {
+            isDrawing = true;
+            ctx_canvas.beginPath();
+            document.getElementById('signature-placeholder').classList.add('hidden');
+        }
+
+        function draw(event) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            ctx_canvas.lineTo(x, y);
+            ctx_canvas.stroke();
+        }
+
+        function startDrawingTouch(event) {
+            isDrawing = true;
+            ctx_canvas.beginPath();
+            document.getElementById('signature-placeholder').classList.add('hidden');
+            event.preventDefault();
+        }
+
+        function drawTouch(event) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const touch = event.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            ctx_canvas.lineTo(x, y);
+            ctx_canvas.stroke();
+            event.preventDefault();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearSignature() {
+            ctx_canvas.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('signature-placeholder').classList.remove('hidden');
+            synthesizeSound('warning');
+        }
+
+        function saveAndCompletePPE() {
+            synthesizeSound('success');
+            completeMission(10);
+            
+            // Custom institutional message box instead of window.alert()
+            const feedbackPanel = document.createElement('div');
+            feedbackPanel.className = "fixed inset-0 flex items-center justify-center bg-black/80 z-[100] px-4 animate-fade-in";
+            feedbackPanel.id = "cert-modal";
+            feedbackPanel.innerHTML = `
+                <div class="bg-space-900 border-2 border-cyber-emerald rounded-3xl p-6 max-w-md w-full text-center glow-emerald relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-cyber-emerald/15 rounded-full blur-xl"></div>
+                    <span class="text-5xl text-cyber-emerald block mb-4"><i class="fa-solid fa-trophy animate-bounce"></i></span>
+                    <h3 class="font-tech text-lg font-black text-white uppercase tracking-wider mb-2">¡Felicitaciones Promotor!</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        Has completado con éxito la simulación de la Fase de Información para el curso <strong>2do E de Bachillerato</strong>. Tus 10 bitácoras acumuladas han certificado un total de <strong>20 Horas oficiales de PPE (Fase 1)</strong> bajo la dirección del Ing. César Godoy.
+                    </p>
+                    <button onclick="document.getElementById('cert-modal').remove()" class="px-5 py-2.5 bg-cyber-emerald hover:bg-emerald-600 text-space-950 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300">
+                        Cerrar Registro Oficial
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(feedbackPanel);
+        }
+
+        // Gemini API dynamic AI Bitacora Redactor
+        async function improveWithAI() {
+            const concept = document.getElementById('bitacora-input-concept').value;
+            const application = document.getElementById('bitacora-input-application').value;
+            
+            if (!concept || !application) {
+                synthesizeSound('fail');
+                alertBox("Por favor completa los dos recuadros de texto con tus ideas iniciales para que la IA pueda expandirlos.");
+                return;
+            }
+
+            // Play loading tone beep
+            synthesizeSound('cyber');
+            const previewBox = document.getElementById('bitacora-preview-box');
+            previewBox.classList.add('opacity-50', 'pointer-events-none');
+            
+            const btn = document.querySelector('button[onclick="improveWithAI()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Redactando...`;
+            btn.disabled = true;
+
+            const systemPrompt = `
+                Actúas como un tutor metodológico experto en el programa de Participación Estudiantil (PPE) del Ministerio de Educación de Ecuador. 
+                Tu objetivo es perfeccionar el borrador de bitácora de un estudiante de la Unidad Educativa Fiscomisional "Sagrado Corazón" de Esmeraldas, Ecuador.
+                Debes redactar con excelente rigor académico, usando un lenguaje formal, técnico pero motivador.
+                Entrega un JSON estructurado de forma estricta con tres propiedades: "aprendizaje", "aplicacion" y "compromiso".
+            `;
+
+            const userPrompt = `
+                Estructura la bitácora de la Semana ${currentSelectedWeek} para el curso 2do E de Bachillerato de la Unidad Educativa Sagrado Corazón.
+                Tema del proyecto: Salud y Bienestar Social (Contra el Sedentarismo digital por hiperconectividad mediante cabina digital).
+                Tutor del curso: Ing. César Godoy Rosero, Mgt.
+                Año Lectivo: 2026-2027.
+                Duración: 2 períodos de 40 minutos cada uno (80 minutos totales).
+
+                Ideas crudas del estudiante sobre lo que aprendió: "${concept}"
+                Ideas crudas sobre cómo lo aplica en su entorno: "${application}"
+
+                Genera el JSON estructurado respondiendo con rigor curricular de Bachillerato de la LOEI de Ecuador.
+            `;
+
+            const apiKey = ""; // Canvas runtime API key injection
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "aprendizaje": { "type": "STRING", "description": "Resumen técnico formal de los aprendizajes alcanzados en la semana." },
+                            "aplicacion": { "type": "STRING", "description": "Cómo aplica de forma práctica el estudiante este conocimiento en su comunidad educativa y hogar." },
+                            "compromiso": { "type": "STRING", "description": "Compromiso axiológico ético alineado a los 10 valores humanos del promotor frente al sedentarismo." }
+                        },
+                        required: ["aprendizaje", "aplicacion", "compromiso"]
+                    }
+                },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (jsonText) {
+                    const parsed = JSON.parse(jsonText);
+                    document.getElementById('preview-learning').innerText = parsed.aprendizaje;
+                    document.getElementById('preview-application').innerText = parsed.aplicacion;
+                    document.getElementById('preview-commitment').innerText = parsed.compromiso;
+                    synthesizeSound('success');
+                    completeMission(currentSelectedWeek);
+                } else {
+                    throw new Error("Formato de respuesta IA inválido");
+                }
+            } catch (e) {
+                console.error("Error calling Gemini API: ", e);
+                synthesizeSound('fail');
+                alertBox("Hubo un contratiempo al sintonizar el canal de IA. Se ha generado un borrador enriquecido localmente de respaldo.");
+                // High-quality local fallback in case of throttling/offline
+                generateLocalFallback();
+            } finally {
+                previewBox.classList.remove('opacity-50', 'pointer-events-none');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Local rich text fallback
+        function generateLocalFallback() {
+            const concept = document.getElementById('bitacora-input-concept').value;
+            const application = document.getElementById('bitacora-input-application').value;
+            
+            document.getElementById('preview-learning').innerText = `Se consolidó formalmente el entendimiento sobre: ${concept}. El marco de estudio facilitó el desarrollo cognitivo mediante la reflexión crítica metodológica coordinada por el tutor Ing. César Godoy Rosero, promoviendo habilidades psicofísicas claves de autocontrol y balance frente a las tecnologías interconectadas de comunicación.`;
+            document.getElementById('preview-application').innerText = `La implementación práctica en la institución fiscal Sagrado Corazón de Esmeraldas se proyecta mediante: ${application}. Contribuyendo asertivamente al diseño de productos multimedia idóneos transmitidos desde la cabina digital, transformando las plataformas de interacción social comunes en espacios activos de concienciación y cambio comunitario frente al sedentarismo.`;
+            document.getElementById('preview-commitment').innerText = `Asumo el rol cívico como promotor comunitario del Sagrado Corazón, comprometiéndome a interactuar asertivamente de forma responsable, fomentando la empatía, el trabajo cooperativo, la justicia axiológica y la desintoxicación digital activa en el período lectivo 2026-2027.`;
+            
+            completeMission(currentSelectedWeek);
+        }
+
+        // Copy generated Draft text to clipboard
+        function copyToClipboard() {
+            const learning = document.getElementById('preview-learning').innerText;
+            const application = document.getElementById('preview-application').innerText;
+            const commitment = document.getElementById('preview-commitment').innerText;
+            
+            const rawText = `UNIDAD EDUCATIVA FISCOMISIONAL SAGRADO CORAZÓN\nBITÁCORA DE PPE - SEMANA ${currentSelectedWeek}\nTUTOR: Ing. César Godoy Rosero, Mgt.\nDURACIÓN: 2 períodos de 40 min (80 min)\n\n1. RESUMEN DE APRENDIZAJES:\n${learning}\n\n2. APLICACIÓN EN LA COMUNIDAD:\n${application}\n\n3. COMPROMISOS Y VALORES:\n${commitment}`;
+            
+            // Clipboard fallback mechanism due to iframe restriction
+            const tempInput = document.createElement("textarea");
+            tempInput.value = rawText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            synthesizeSound('success');
+            alertBox("¡Copiado con éxito! Puedes pegar el contenido directamente en tu bitácora digital en Microsoft Word o Google Docs.");
+        }
+
+        // Creative Hub dynamic output using Gemini
+        async function generateEducontent() {
+            const format = document.getElementById('ai-hub-format').value;
+            const topic = document.getElementById('ai-hub-topic').value || "Inercia del Scroll Infinito y sedentarismo en adolescentes";
+            
+            synthesizeSound('cyber');
+            const panel = document.getElementById('ai-result-panel');
+            const textContainer = document.getElementById('ai-result-text');
+            const btn = document.getElementById('ai-generate-btn');
+            
+            panel.classList.remove('hidden');
+            textContainer.innerText = "Sintonizando antenas satelitales de la Cabina Digital... Por favor, espera.";
+            btn.disabled = true;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `
+                Eres el asistente inteligente de la cabina digital de la Unidad Educativa Fiscomisional "Sagrado Corazón" de Esmeraldas, Ecuador.
+                Generas contenidos dinámicos, educativos y juveniles para combatir el sedentarismo digital y promover la salud psicofísica.
+                Utiliza un tono juvenil pero muy estructurado metodológicamente.
+            `;
+
+            const userPrompt = `
+                Genera un ${format} enfocado en el tema: "${topic}".
+                Dirigido a los estudiantes de Bachillerato de la provincia de Esmeraldas.
+                Incluye llamados a la acción creativos basados en romper el scroll de pantalla e interactuar físicamente.
+            `;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                const output = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if (output) {
+                    synthesizeSound('success');
+                    textContainer.innerText = output;
+                } else {
+                    throw new Error();
+                }
+            } catch (e) {
+                synthesizeSound('fail');
+                textContainer.innerText = `[CABINA LOCAL FALLBACK ERROR]\n\n¡Alerta de interferencia satelital! Pero no te preocupes, aquí tienes un Slogan y Guión de respaldo para tu difusión escolar:\n\n🎧 TÍTULO: Rompe la Inercia Digital de 2do E\n🔊 CONTROL: Sube música electrónica y baja a fondo de locución.\n🎤 LOCUTOR 1: Ey, tú. Sí, el que lleva dos horas viendo la pantalla sin moverse en los pasillos del Sagrado Corazón.\n🎤 LOCUTOR 2: ¡Muévete! Tu cuerpo necesita acción. El scroll infinito te atrapa, pero el movimiento te libera. Hagamos un pacto: ¡5 minutos de estiramientos en este recreo!\n🔊 CONTROL: Efecto de sonido 'laser' y cierre.`;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function copyAiOutput() {
+            const text = document.getElementById('ai-result-text').innerText;
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            synthesizeSound('success');
+            alertBox("¡Texto de cabina copiado con éxito!");
+        }
+
+        // Custom non-blocking alert popup UI
+        function alertBox(msg) {
+            const box = document.createElement('div');
+            box.className = "fixed bottom-5 right-5 bg-space-900 border border-cyber-purple/50 text-xs text-slate-200 p-4 rounded-2xl shadow-xl glow-purple max-w-xs z-50 animate-bounce flex flex-col gap-2";
+            box.innerHTML = `
+                <div class="flex items-center gap-2 font-bold uppercase font-tech text-cyber-neon">
+                    <i class="fa-solid fa-satellite-dish"></i> Notificación de Cabina
+                </div>
+                <p class="leading-relaxed text-slate-300">${msg}</p>
+                <button onclick="this.parentElement.remove()" class="text-right text-[10px] text-cyber-purple uppercase font-bold hover:underline">Entendido</button>
+            `;
+            document.body.appendChild(box);
+            setTimeout(() => { if (box) box.remove() }, 6500);
+        }
+    </script>
+</body>
+</html>
+```
+eof
